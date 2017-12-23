@@ -17,7 +17,7 @@ public class Runner {
 
     public static void main(String[] args) {
         try {
-            if (!(args == null || args.length == 0 || (args[0] != null && JETTY.equals(args[0])))) {
+            if ((args == null || args.length == 0 || (args[0] != null && JETTY.equals(args[0])))) {
                 log.info("Run Jetty");
                 JettyServer.main(args);
             } else {
