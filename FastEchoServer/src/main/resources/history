@@ -1,0 +1,359 @@
+ 
+  ulimit -n 100000
+  ab -kc 1000  -n 10000 -p post.data http://localhost:8080/fprov/fcgi_pos?message_id=8
+  wrk -d10s -t1k -c1k -s /home/igor/tools/wrk/scripts/post.lua http://localhost:8080/fprov/fcgi_pos?message_id=8
+
+
+  curl -X POST http://127.1:8080
+
+
+
+root@isalnikov:/home/igor# ulimit -n 60000
+
+JETTY
+
+root@isalnikov:/home/igor# wrk -d10s -t1 -c10k -s /home/igor/tools/wrk/scripts/post.lua --latency  http://127.1:8080/fprov/fcgi_pos?message_id=8
+Running 10s test @ http://127.1:8080/fprov/fcgi_pos?message_id=8
+  1 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   106.03ms   59.96ms 426.59ms   67.22%
+    Req/Sec    35.62k     5.43k   46.88k    75.82%
+  Latency Distribution
+     50%   95.70ms
+     75%  144.49ms
+     90%  191.99ms
+     99%  270.35ms
+  343208 requests in 10.04s, 62.84MB read
+Requests/sec:  34180.42
+Transfer/sec:      6.26MB
+
+
+root@isalnikov:/home/igor# wrk -d10s -t4 -c10k -s /home/igor/tools/wrk/scripts/post.lua --latency  http://127.1:8080/fprov/fcgi_pos?message_id=8
+Running 10s test @ http://127.1:8080/fprov/fcgi_pos?message_id=8
+  4 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   102.15ms   64.37ms 925.57ms   70.95%
+    Req/Sec     9.10k     2.66k   18.31k    69.17%
+  Latency Distribution
+     50%   95.84ms
+     75%  135.91ms
+     90%  182.10ms
+     99%  328.60ms
+  361700 requests in 10.10s, 66.23MB read
+  Socket errors: connect 0, read 2326, write 0, timeout 0
+Requests/sec:  35799.88
+Transfer/sec:      6.56MB
+
+
+
+root@isalnikov:/home/igor#  wrk -d60s -t4 -c10k -s /home/igor/tools/wrk/scripts/post.lua --latency  http://127.1:8080/fprov/fcgi_pos?message_id=8
+Running 1m test @ http://127.1:8080/fprov/fcgi_pos?message_id=8
+  4 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   105.02ms   80.43ms   1.93s    85.85%
+    Req/Sec    17.41k     5.21k   37.17k    70.78%
+  Latency Distribution
+     50%   97.42ms
+     75%  137.66ms
+     90%  177.99ms
+     99%  284.24ms
+  4125280 requests in 1.00m, 440.56MB read
+  Socket errors: connect 0, read 94, write 0, timeout 76
+Requests/sec:  68623.20
+Transfer/sec:      7.33MB
+
+root@isalnikov:/home/igor# wrk -d10s -t4 -c10k -s /home/igor/tools/wrk/scripts/post.lua --latency  http://127.1:8080/fprov/fcgi_pos?message_id=8
+Running 10s test @ http://127.1:8080/fprov/fcgi_pos?message_id=8
+  4 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   102.15ms   64.37ms 925.57ms   70.95%
+    Req/Sec     9.10k     2.66k   18.31k    69.17%
+  Latency Distribution
+     50%   95.84ms
+     75%  135.91ms
+     90%  182.10ms
+     99%  328.60ms
+  361700 requests in 10.10s, 66.23MB read
+  Socket errors: connect 0, read 2326, write 0, timeout 0
+Requests/sec:  35799.88
+Transfer/sec:      6.56MB
+
+root@isalnikov:/home/igor# ab -kc 1 -n 10000 -p post.data http://127.1:8080/fprov/fcgi_pos?message_id=8
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.1 (be patient)
+Completed 1000 requests
+Completed 2000 requests
+Completed 3000 requests
+Completed 4000 requests
+Completed 5000 requests
+Completed 6000 requests
+Completed 7000 requests
+Completed 8000 requests
+Completed 9000 requests
+Completed 10000 requests
+Finished 10000 requests
+
+
+Server Software:        Jetty(9.4.5.v20170502)
+Server Hostname:        127.1
+Server Port:            8080
+
+Document Path:          /fprov/fcgi_pos?message_id=8
+Document Length:        20 bytes
+
+Concurrency Level:      1
+Time taken for tests:   1.047 seconds
+Complete requests:      10000
+Failed requests:        5173
+   (Connect: 0, Receive: 0, Length: 5000, Exceptions: 173)
+Keep-Alive requests:    5000
+Total transferred:      885000 bytes
+Total body sent:        1750000
+HTML transferred:       100000 bytes
+Requests per second:    9552.80 [#/sec] (mean)
+Time per request:       0.105 [ms] (mean)
+Time per request:       0.105 [ms] (mean, across all concurrent requests)
+Transfer rate:          825.61 [Kbytes/sec] received
+                        1632.56 kb/s sent
+                        2458.17 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       7
+Processing:     0    0   0.2      0      18
+Waiting:        0    0   0.2      0      18
+Total:          0    0   0.2      0      18
+
+Percentage of the requests served within a certain time (ms)
+  50%      0
+  66%      0
+  75%      0
+  80%      0
+  90%      0
+  95%      0
+  98%      0
+  99%      0
+ 100%     18 (longest request)
+
+
+root@isalnikov:/home/igor# ab -kc 10 -n 10000 -p post.data http://127.1:8080/fprov/fcgi_pos?message_id=8
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.1 (be patient)
+Completed 1000 requests
+Completed 2000 requests
+Completed 3000 requests
+Completed 4000 requests
+Completed 5000 requests
+Completed 6000 requests
+Completed 7000 requests
+Completed 8000 requests
+Completed 9000 requests
+Completed 10000 requests
+Finished 10000 requests
+
+
+Server Software:        Jetty(9.4.5.v20170502)
+Server Hostname:        127.1
+Server Port:            8080
+
+Document Path:          /fprov/fcgi_pos?message_id=8
+Document Length:        20 bytes
+
+Concurrency Level:      10
+Time taken for tests:   0.462 seconds
+Complete requests:      10000
+Failed requests:        9638
+   (Connect: 0, Receive: 0, Length: 5000, Exceptions: 4638)
+Keep-Alive requests:    5000
+Total transferred:      885000 bytes
+Total body sent:        1750000
+HTML transferred:       100000 bytes
+Requests per second:    21658.48 [#/sec] (mean)
+Time per request:       0.462 [ms] (mean)
+Time per request:       0.046 [ms] (mean, across all concurrent requests)
+Transfer rate:          1871.85 [Kbytes/sec] received
+                        3701.40 kb/s sent
+                        5573.25 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.2      0       2
+Processing:     0    0   0.4      0       7
+Waiting:        0    0   0.4      0       7
+Total:          0    0   0.5      0       8
+
+Percentage of the requests served within a certain time (ms)
+  50%      0
+  66%      1
+  75%      1
+  80%      1
+  90%      1
+  95%      1
+  98%      2
+  99%      2
+ 100%      8 (longest request)
+root@isalnikov:/home/igor# 
+
+
+NETTY
+
+root@isalnikov:/home/igor# ab -kc 100 -n 10000 -p post.data http://127.1:8080/fprov/fcgi_pos?message_id=8
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.1 (be patient)
+Completed 1000 requests
+Completed 2000 requests
+Completed 3000 requests
+Completed 4000 requests
+Completed 5000 requests
+Completed 6000 requests
+Completed 7000 requests
+Completed 8000 requests
+Completed 9000 requests
+Completed 10000 requests
+Finished 10000 requests
+
+
+Server Software:        
+Server Hostname:        127.1
+Server Port:            8080
+
+Document Path:          /fprov/fcgi_pos?message_id=8
+Document Length:        14 bytes
+
+Concurrency Level:      100
+Time taken for tests:   1.000 seconds
+Complete requests:      10000
+Failed requests:        9991
+   (Connect: 0, Receive: 0, Length: 9991, Exceptions: 0)
+Keep-Alive requests:    10000
+Total transferred:      1708894 bytes
+Total body sent:        1750000
+HTML transferred:       168894 bytes
+Requests per second:    9999.44 [#/sec] (mean)
+Time per request:       10.001 [ms] (mean)
+Time per request:       0.100 [ms] (mean, across all concurrent requests)
+Transfer rate:          1668.75 [Kbytes/sec] received
+                        1708.89 kb/s sent
+                        3377.64 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.2      0       2
+Processing:     0   10  16.1      4     167
+Waiting:        0   10  16.1      4     167
+Total:          0   10  16.2      4     168
+
+Percentage of the requests served within a certain time (ms)
+  50%      4
+  66%     10
+  75%     12
+  80%     15
+  90%     23
+  95%     31
+  98%     39
+  99%    126
+ 100%    168 (longest request)
+root@isalnikov:/home/igor# 
+
+
+root@isalnikov:/home/igor# ab -kc 1 -n 10000 -p post.data http://127.1:8080/fprov/fcgi_pos?message_id=8
+This is ApacheBench, Version 2.3 <$Revision: 1528965 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 127.1 (be patient)
+Completed 1000 requests
+Completed 2000 requests
+Completed 3000 requests
+Completed 4000 requests
+Completed 5000 requests
+Completed 6000 requests
+Completed 7000 requests
+Completed 8000 requests
+Completed 9000 requests
+Completed 10000 requests
+Finished 10000 requests
+
+
+Server Software:        
+Server Hostname:        127.1
+Server Port:            8080
+
+Document Path:          /fprov/fcgi_pos?message_id=8
+Document Length:        18 bytes
+
+Concurrency Level:      1
+Time taken for tests:   0.413 seconds
+Complete requests:      10000
+Failed requests:        0
+Keep-Alive requests:    10000
+Total transferred:      1720000 bytes
+Total body sent:        1750000
+HTML transferred:       180000 bytes
+Requests per second:    24230.79 [#/sec] (mean)
+Time per request:       0.041 [ms] (mean)
+Time per request:       0.041 [ms] (mean, across all concurrent requests)
+Transfer rate:          4070.02 [Kbytes/sec] received
+                        4141.00 kb/s sent
+                        8211.02 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:     0    0   0.1      0      11
+Waiting:        0    0   0.1      0      11
+Total:          0    0   0.1      0      11
+
+Percentage of the requests served within a certain time (ms)
+  50%      0
+  66%      0
+  75%      0
+  80%      0
+  90%      0
+  95%      0
+  98%      0
+  99%      0
+ 100%     11 (longest request)
+
+
+    root@isalnikov:/home/igor# wrk -d10s -t4 -c10k -s /home/igor/tools/wrk/scripts/post.lua --latency  http://127.1:8080/fprov/fcgi_pos?message_id=8
+Running 10s test @ http://127.1:8080/fprov/fcgi_pos?message_id=8
+  4 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    41.36ms   31.94ms 648.21ms   83.35%
+    Req/Sec    18.01k     6.40k   48.74k    69.78%
+  Latency Distribution
+     50%   35.54ms
+     75%   52.88ms
+     90%   74.17ms
+     99%  128.71ms
+  714970 requests in 10.07s, 117.89MB read
+  Socket errors: connect 0, read 19, write 0, timeout 0
+Requests/sec:  71006.32
+Transfer/sec:     11.71MB
+
+
+root@isalnikov:/home/igor# wrk -d10s -t1 -c10k -s /home/igor/tools/wrk/scripts/post.lua --latency  http://127.1:8080/fprov/fcgi_pos?message_id=8
+Running 10s test @ http://127.1:8080/fprov/fcgi_pos?message_id=8
+  1 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    41.58ms   68.63ms   1.77s    96.68%
+    Req/Sec    53.63k    22.04k   78.02k    72.09%
+  Latency Distribution
+     50%   29.42ms
+     75%   34.71ms
+     90%   61.53ms
+     99%  185.12ms
+  527632 requests in 10.07s, 86.95MB read
+  Socket errors: connect 0, read 859, write 0, timeout 0
+Requests/sec:  52392.34
+Transfer/sec:      8.63MB
